@@ -832,8 +832,11 @@ function toast(txt){
   document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
 }
 function cue(txt){
-  const c=document.createElement('div');c.className='cue';c.textContent=txt;
-  document.body.appendChild(c);setTimeout(()=>c.remove(),1700);
+  return new Promise(resolve=>{
+    const c=document.createElement('div');c.className='cue';c.textContent=txt;
+    document.body.appendChild(c);
+    setTimeout(()=>{c.remove();resolve();},1700);
+  });
 }
 function sparks(cx,cy,n){
   const cols=['#d4af37','#ff69b4','#ffb7c5','#fff','#e91e8c'];
@@ -864,25 +867,37 @@ function goToPage(id){
   stopTimer();
   const cur=document.getElementById(curPage);
   const nxt=document.getElementById(id);
+  const isQ=id.startsWith('page-q');
+  const cues={'page-q1':'🐾 Question 1','page-q2':'🐾 Question 2','page-q3':'🐾 Question 3','page-q4':'🐾 Question 4','page-q5':'🐾 Last one...'};
+
+  // 1) Exit current page
   cur.classList.add('page-exit');
   setTimeout(()=>{
     cur.classList.remove('active','page-exit','page-enter');
     cur.style.display='none';
-    nxt.style.display='flex';
-    nxt.classList.add('active','page-enter');
     curPage=id;
     updateProg(id);
-    const isQ=id.startsWith('page-q');
-    document.getElementById('scoreChip').style.display=isQ?'block':'none';
+
     if(isQ){
-      startTimer();
-      const cues={'page-q1':'🐾 Question 1','page-q2':'🐾 Question 2','page-q3':'🐾 Question 3','page-q4':'🐾 Question 4','page-q5':'🐾 Last one...'};
-      cue(cues[id]||'🎵');
+      // 2) Show cue alone on blank screen, wait for it to fully fade
+      cue(cues[id]||'🎵').then(()=>{
+        // 3) Then show the question page
+        nxt.style.display='flex';
+        nxt.classList.add('active','page-enter');
+        document.getElementById('scoreChip').style.display='block';
+        startTimer();
+        window.scrollTo({top:0,behavior:'instant'});
+      });
+    } else {
+      // Non-question pages: show immediately
+      nxt.style.display='flex';
+      nxt.classList.add('active','page-enter');
+      document.getElementById('scoreChip').style.display='none';
+      if(id==='page-results') showResults();
+      if(id==='page-ask')     initAsk();
+      if(id==='page-celebrate') celebrate();
+      window.scrollTo({top:0,behavior:'instant'});
     }
-    if(id==='page-results') showResults();
-    if(id==='page-ask')     initAsk();
-    if(id==='page-celebrate') celebrate();
-    window.scrollTo({top:0,behavior:'instant'});
   },350);
 }
 
