@@ -869,7 +869,7 @@ function goToPage(id){
     document.getElementById('scoreChip').style.display=isQ?'block':'none';
     if(isQ){
       startTimer();
-      const cues={'page-q1':'🎵 ROUND 1 — FIGHT!','page-q2':'🎵 Round 2... 👀','page-q3':'🔥 Round 3','page-q4':'⚠️ CRITICAL ROUND','page-q5':'🏁 FINAL ROUND'};
+      const cues={'page-q1':'🐾 Question 1','page-q2':'🐾 Question 2','page-q3':'🐾 Question 3','page-q4':'🐾 Question 4','page-q5':'🐾 Last one...'};
       cue(cues[id]||'🎵');
     }
     if(id==='page-results') showResults();
