@@ -609,7 +609,6 @@ canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:50;}
      pts      — points awarded (correct gets full, wrong gets 30%)
    ═══════════════════════════════════════════ */
 const QUESTIONS = [
-  // Q1
   {
     sticker: 'images/money-staring.webp',
     question: "First things first. What. Is. My. Name.",
@@ -624,7 +623,6 @@ const QUESTIONS = [
     wrong: "...seriously? We literally just met.",
     pts: 100
   },
-  // Q2
   {
     sticker: 'images/money-curious.webp',
     question: "How long have you known my human?",
@@ -639,7 +637,6 @@ const QUESTIONS = [
     wrong: "Hmm. Suspicious. But I'll let it slide.",
     pts: 100
   },
-  // Q3
   {
     sticker: 'images/money-puppy-eyes.webp',
     question: "What does my human call you? 🥺",
@@ -654,8 +651,8 @@ const QUESTIONS = [
     wrong: "I've heard the voice notes. Try again.",
     pts: 100
   },
-  // Q4
-  {sticker: 'images/money-sassy.webp'webp',
+  {
+    sticker: 'images/money-sassy.webp',
     question: "Both drowning. Who do you save first? 🏊",
     options: [
       {text: "Money, obviously 🐕", value: "Money, obviously"},
@@ -668,8 +665,8 @@ const QUESTIONS = [
     wrong: "Wrong answer but I'll remember this.",
     pts: 100
   },
-  // Q5
-  {sticker: 'images/money-judging.webp'webp',
+  {
+    sticker: 'images/money-judging.webp',
     question: "My human says you came to his dorm room when you first met. What was your excuse?",
     options: [
       {text: "\"Can I watch you do your math tutorial?\" 📚", value: "math"},
@@ -682,8 +679,8 @@ const QUESTIONS = [
     wrong: "That's not what my sources tell me.",
     pts: 100
   },
-  // Q6
-  {sticker: 'images/money-judgy.webp'webp',
+  {
+    sticker: 'images/money-judgy.webp',
     question: "What happened on the way to your planned second meeting? 💀",
     options: [
       {text: "Perfect night out 🎳", value: "perfect"},
@@ -696,9 +693,8 @@ const QUESTIONS = [
     wrong: "I have the parking lot footage. Try again.",
     pts: 100
   },
-  // Q7
   {
- sticker: 'images/money-goofy.webp'bp',
+    sticker: 'images/money-goofy.webp',
     question: "What was my human doing the first weekend you were texting?",
     options: [
       {text: "Crashing out at a hackathon 💻", value: "hackathon"},
@@ -711,9 +707,8 @@ const QUESTIONS = [
     wrong: "I was there. Well, in spirit.",
     pts: 100
   },
-  // Q8
   {
- sticker: 'images/money-staring.webp'bp',
+    sticker: 'images/money-staring.webp',
     question: "What do you call my human when nobody's listening? 🦤",
     options: [
       {text: "Dodo 🦤", value: "Dodo"},
@@ -726,7 +721,6 @@ const QUESTIONS = [
     wrong: "Interesting. I'll be investigating this further.",
     pts: 100
   },
-  // Q9
   {
     sticker: 'images/money-sassy.webp',
     question: "What did my human suggest as your first date? 🪨",
@@ -741,7 +735,6 @@ const QUESTIONS = [
     wrong: "My human is far less normal than that.",
     pts: 100
   },
-  // Q10
   {
     sticker: 'images/money-judging.webp',
     question: "How do you cheer yourself up when you're sad? 💀",
@@ -756,9 +749,8 @@ const QUESTIONS = [
     wrong: "I've seen the texts. I know your methods.",
     pts: 100
   },
-  // Q11
   {
-  sticker: 'images/money-curious.webp'p',
+    sticker: 'images/money-curious.webp',
     question: "My brother Blackie is less charming than me. What does he always want? 🎾",
     options: [
       {text: "Belly rubs 🐾", value: "belly"},
@@ -771,9 +763,8 @@ const QUESTIONS = [
     wrong: "Blackie's disappointed. But when isn't he.",
     pts: 100
   },
-  // Q12
   {
-  sticker: 'images/money-happy.webp'p',
+    sticker: 'images/money-happy.webp',
     question: "How do you cheer my human up when he's sad? 😘",
     options: [
       {text: "Smooches 😘", value: "smooches"},
@@ -786,9 +777,8 @@ const QUESTIONS = [
     wrong: "I've seen how you two work. Try again.",
     pts: 100
   },
-  // Q13
   {
-  sticker: 'images/money-goofy.webp'p',
+    sticker: 'images/money-goofy.webp',
     question: "What's my human's favourite thing to do when he's bored? 🦎",
     options: [
       {text: "Lizard! 🦎", value: "lizard"},
@@ -801,9 +791,8 @@ const QUESTIONS = [
     wrong: "You clearly don't know my human well enough.",
     pts: 100
   },
-  // Q14
   {
-  sticker: 'images/money-judgy.webp'p',
+    sticker: 'images/money-judgy.webp',
     question: "What does my human want to do but isn't allowed to? 😬",
     options: [
       {text: "Chomp your face 😬", value: "chomp"},
@@ -816,7 +805,6 @@ const QUESTIONS = [
     wrong: "It's worse than you think.",
     pts: 100
   },
-  // Q15
   {
     sticker: 'images/money-curious.webp',
     question: "What's your favourite food? Choose wisely. 🍣",
@@ -831,9 +819,8 @@ const QUESTIONS = [
     wrong: "I'm not mad, just disappointed.",
     pts: 100
   },
-  // Q16
   {
-  sticker: 'images/money-sassy.webp'p',
+    sticker: 'images/money-sassy.webp',
     question: "You played TypeRacer the night you met. Who won? ⌨️",
     options: [
       {text: "Me obviously 💅", value: "ashley"},
@@ -846,7 +833,6 @@ const QUESTIONS = [
     wrong: "That's not what the scoreboard says.",
     pts: 100
   },
-  // Q17
   {
     sticker: 'images/money-judgy.webp',
     question: "What does my human's girl complain about every morning? 🚇",
@@ -861,7 +847,6 @@ const QUESTIONS = [
     wrong: "I monitor the texts. I know.",
     pts: 100
   },
-  // Q18
   {
     sticker: 'images/money-belly.webp',
     question: "Between me, Blackie, and my human — who's the clingiest? 🤗",
@@ -876,7 +861,6 @@ const QUESTIONS = [
     wrong: "I am NOT clingy. I just like being close. There's a difference.",
     pts: 100
   },
-  // Q19
   {
     sticker: 'images/money-puppy-eyes.webp',
     question: "Do you promise to give my human many many smooches when he asks? 😘",
@@ -891,7 +875,6 @@ const QUESTIONS = [
     wrong: "",
     pts: 200
   },
-  // Q20
   {
     sticker: 'images/money-happy.webp',
     question: "Last question. Are you ready for what's coming next? 👀",
@@ -1056,7 +1039,6 @@ function addScore(pts,x,y){
    TOAST / CUE / SPARKLES
    ═══════════════════════════════════════════ */
 function toast(txt){
-  // Remove any existing toasts first
   document.querySelectorAll('.toast').forEach(el => {
     el.style.opacity = '0';
     setTimeout(() => el.remove(), 200);
@@ -1070,7 +1052,6 @@ function toast(txt){
 }
 function cue(txt){
   return new Promise(resolve=>{
-    // Remove any existing cues first
     document.querySelectorAll('.cue').forEach(el => el.remove());
     const c=document.createElement('div');c.className='cue';c.textContent=txt;
     document.body.appendChild(c);
