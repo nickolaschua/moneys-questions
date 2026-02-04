@@ -892,8 +892,8 @@ const QUESTIONS = [
 ];
 
 const TOTAL_Q = QUESTIONS.length;
-const COR_IMG = 'images/cor-img.webp';
-const WRG_IMG = 'images/wrg-img.webp';
+const COR_IMG = 'images/money-happy.webp';
+const WRG_IMG = 'images/money-judgy.webp';
 
 const CROWD_Y = [
   "🎉 The crowd goes WILD!","👏 Standing ovation!","🔥 THAT'S what we like to hear!",
@@ -1174,21 +1174,24 @@ function nextQuestion(){
     const page = document.getElementById('page-question');
     page.classList.add('page-exit');
     setTimeout(()=>{
-      page.classList.remove('page-exit');
-      renderQuestion(currentQ);
-      // Re-trigger entrance
-      page.classList.remove('page-enter');
-      void page.offsetWidth;
-      page.classList.add('page-enter');
-      // Cue
+      page.classList.remove('page-exit','page-enter');
+      // Hide content while cue plays
+      const content = document.getElementById('q-content');
+      content.style.opacity = '0';
+      // Cue first, then show question
       const cueText = currentQ === TOTAL_Q - 1
         ? '🐾 Last one...'
         : '🐾 Question ' + (currentQ + 1);
       updateProg();
+      window.scrollTo({top:0,behavior:'instant'});
       cue(cueText).then(()=>{
+        renderQuestion(currentQ);
+        content.style.opacity = '1';
+        page.classList.remove('page-enter');
+        void page.offsetWidth;
+        page.classList.add('page-enter');
         startTimer();
       });
-      window.scrollTo({top:0,behavior:'instant'});
     },350);
   }
 }
