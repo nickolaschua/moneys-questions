@@ -442,10 +442,14 @@ h1{
   font-size:1rem;color:#9a8a7a;
   margin-bottom:24px;
 }
+.ask-btns{
+  display:flex;gap:16px;justify-content:center;align-items:center;
+  margin-top:12px;
+}
 .btn-yes{
   background:linear-gradient(135deg,#ff69b4,#e91e8c);
-  color:#fff;font-size:1.35rem;
-  padding:20px 56px;
+  color:#fff;font-size:1.1rem;
+  padding:14px 40px;
   animation:yesPulse 2s cubic-bezier(.4,0,.2,1) infinite;
   box-shadow:0 0 30px rgba(233,30,140,.35);
 }
@@ -454,14 +458,13 @@ h1{
   50%{transform:scale(1.06);box-shadow:0 0 44px rgba(233,30,140,.55);}
 }
 .btn-nah{
-  position:absolute;
-  background:rgba(255,255,255,.06);
-  color:#554444;font-size:.72rem;
-  padding:6px 16px;border-radius:16px;
-  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.12);
+  color:#ffb7c5;font-size:1.1rem;
+  padding:14px 40px;border-radius:16px;
+  border:1px solid rgba(255,183,197,.25);
   cursor:pointer;font-family:'Quicksand',sans-serif;
   font-weight:600;z-index:10;
-  transition:all .15s ease;
+  transition:all .18s ease;
 }
 
 /* ═══════════════════════════════════════════
@@ -577,8 +580,10 @@ canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:50;}
     <img class="sticker" src="images/money-happy.webp" alt="Money happy">
     <p class="ask-q" id="askQ" style="opacity:0"></p>
     <p class="ask-sub" id="askSub" style="opacity:0">— Nick (and Money, obviously) 🐾</p>
-    <button class="btn btn-yes" id="yesBtn" onclick="sayYes()" style="opacity:0">Yes! 💕</button>
-    <button class="btn-nah" id="noBtn" onclick="runNo()" style="opacity:0">no</button>
+    <div class="ask-btns" id="askBtns" style="opacity:0">
+      <button class="btn btn-yes" id="yesBtn" onclick="sayYes()">Yes! 💕</button>
+      <button class="btn-nah" id="noBtn" onclick="runNo()">no</button>
+    </div>
   </div>
 </div>
 
@@ -1311,10 +1316,11 @@ function initAsk(){
   }
   const q=document.getElementById('askQ');
   const sub=document.getElementById('askSub');
-  const yes=document.getElementById('yesBtn');
+  const btns=document.getElementById('askBtns');
   const no=document.getElementById('noBtn');
   const askText="Ashley, will you be my girlfriend?";
   q.textContent='';q.style.opacity='1';
+  no.style.position='';no.style.left='';no.style.top='';no.style.bottom='';no.style.transform='';noSz=1;
   let ai=0;
   function typeAsk(){
     if(ai<askText.length){
@@ -1322,8 +1328,7 @@ function initAsk(){
       setTimeout(typeAsk,ai<8?100:75);
     } else {
       setTimeout(()=>{sub.style.opacity='1';sub.style.animation='fadeUp .7s ease';},400);
-      setTimeout(()=>{yes.style.opacity='1';yes.style.animation='yesPulse 2s cubic-bezier(.4,0,.2,1) infinite';},1100);
-      setTimeout(()=>{no.style.opacity='1';no.style.bottom='55px';no.style.left='50%';no.style.transform='translateX(-50%)';noSz=1;},1800);
+      setTimeout(()=>{btns.style.opacity='1';btns.style.animation='fadeUp .5s ease';},1100);
     }
   }
   setTimeout(typeAsk,800);
@@ -1332,6 +1337,10 @@ function runNo(){
   const btn=document.getElementById('noBtn');
   const box=document.getElementById('askBox');
   const r=box.getBoundingClientRect();
+  // First click: pop it out of flex flow and start running away
+  if(btn.style.position !== 'absolute'){
+    btn.style.position='absolute';
+  }
   const mX=r.width-btn.offsetWidth-16;
   const mY=r.height-btn.offsetHeight-16;
   const nx=Math.max(8,Math.random()*mX);
