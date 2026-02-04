@@ -895,6 +895,13 @@ const TOTAL_Q = QUESTIONS.length;
 const COR_IMG = 'images/money-happy.webp';
 const WRG_IMG = 'images/money-judgy.webp';
 
+// Preload all sticker images so they're ready immediately
+(function preloadImages(){
+  const imgs = [COR_IMG, WRG_IMG];
+  QUESTIONS.forEach(q => { if(q.sticker) imgs.push(q.sticker); });
+  imgs.forEach(src => { const i = new Image(); i.src = src; });
+})();
+
 const CROWD_Y = [
   "🎉 The crowd goes WILD!","👏 Standing ovation!","🔥 THAT'S what we like to hear!",
   "💫 Money nods approvingly","🎊 Even the judges are impressed!","✨ Flawless!",
@@ -1170,26 +1177,24 @@ function nextQuestion(){
   if(currentQ >= TOTAL_Q){
     goToPage('page-results');
   } else {
-    // Transition within the question page
+    // Transition: hide page → cue → show page (same as Q1)
     const page = document.getElementById('page-question');
     page.classList.add('page-exit');
     setTimeout(()=>{
-      page.classList.remove('page-exit','page-enter');
-      // Hide content while cue plays
-      const content = document.getElementById('q-content');
-      content.style.opacity = '0';
-      // Cue first, then show question
+      // Fully hide the page
+      page.classList.remove('active','page-exit','page-enter');
+      page.style.display = 'none';
+      // Render new question while hidden
+      renderQuestion(currentQ);
+      updateProg();
+      window.scrollTo({top:0,behavior:'instant'});
+      // Show cue, then reveal page
       const cueText = currentQ === TOTAL_Q - 1
         ? '🐾 Last one...'
         : '🐾 Question ' + (currentQ + 1);
-      updateProg();
-      window.scrollTo({top:0,behavior:'instant'});
       cue(cueText).then(()=>{
-        renderQuestion(currentQ);
-        content.style.opacity = '1';
-        page.classList.remove('page-enter');
-        void page.offsetWidth;
-        page.classList.add('page-enter');
+        page.style.display = 'flex';
+        page.classList.add('active','page-enter');
         startTimer();
       });
     },350);
