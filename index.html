@@ -1056,14 +1056,29 @@ function addScore(pts,x,y){
    TOAST / CUE / SPARKLES
    ═══════════════════════════════════════════ */
 function toast(txt){
+  // Remove any existing toasts first
+  document.querySelectorAll('.toast').forEach(el => {
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 200);
+  });
   const t=document.createElement('div');t.className='toast';t.textContent=txt;
-  document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
+  document.body.appendChild(t);setTimeout(()=>{
+    t.style.transition='opacity 0.3s ease';
+    t.style.opacity='0';
+    setTimeout(()=>t.remove(),300);
+  },2500);
 }
 function cue(txt){
   return new Promise(resolve=>{
+    // Remove any existing cues first
+    document.querySelectorAll('.cue').forEach(el => el.remove());
     const c=document.createElement('div');c.className='cue';c.textContent=txt;
     document.body.appendChild(c);
-    setTimeout(()=>{c.remove();resolve();},1700);
+    setTimeout(()=>{
+      c.style.transition='opacity 0.3s ease';
+      c.style.opacity='0';
+      setTimeout(()=>{c.remove();resolve();},300);
+    },1400);
   });
 }
 function sparks(cx,cy,n){
