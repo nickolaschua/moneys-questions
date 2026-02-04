@@ -582,7 +582,7 @@ canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:50;}
     <p class="ask-sub" id="askSub" style="opacity:0">— Nick (and Money, obviously) 🐾</p>
     <div class="ask-btns" id="askBtns" style="opacity:0">
       <button class="btn btn-yes" id="yesBtn" onclick="sayYes()">Yes! 💕</button>
-      <button class="btn-nah" id="noBtn" onclick="runNo()">no</button>
+      <button class="btn-nah" id="noBtn" onclick="runNo(event)">no</button>
     </div>
   </div>
 </div>
@@ -1320,7 +1320,9 @@ function initAsk(){
   const no=document.getElementById('noBtn');
   const askText="Ashley, will you be my girlfriend?";
   q.textContent='';q.style.opacity='1';
-  no.style.position='';no.style.left='';no.style.top='';no.style.bottom='';no.style.transform='';noSz=1;
+  no.style.position='';no.style.left='';no.style.top='';no.style.bottom='';no.style.transform='';noSz=1;yesSz=1;
+  const yesBtn=document.getElementById('yesBtn');
+  yesBtn.style.position='';yesBtn.style.left='';yesBtn.style.top='';yesBtn.style.transform='';
   let ai=0;
   function typeAsk(){
     if(ai<askText.length){
@@ -1333,23 +1335,60 @@ function initAsk(){
   }
   setTimeout(typeAsk,800);
 }
-function runNo(){
-  const btn=document.getElementById('noBtn');
+let yesSz=1;
+function runNo(e){
+  const noBtn=document.getElementById('noBtn');
+  const yesBtn=document.getElementById('yesBtn');
   const box=document.getElementById('askBox');
   const r=box.getBoundingClientRect();
-  // First click: pop it out of flex flow and start running away
-  if(btn.style.position !== 'absolute'){
-    btn.style.position='absolute';
+
+  // Pop No out of flex flow on first click
+  if(noBtn.style.position !== 'absolute'){
+    const noRect=noBtn.getBoundingClientRect();
+    noBtn.style.position='absolute';
+    noBtn.style.left=(noRect.left - r.left)+'px';
+    noBtn.style.top=(noRect.top - r.top)+'px';
   }
-  const mX=r.width-btn.offsetWidth-16;
-  const mY=r.height-btn.offsetHeight-16;
-  const nx=Math.max(8,Math.random()*mX);
-  const ny=Math.max(8,Math.random()*mY);
-  noSz=Math.max(.25,noSz*.78);
-  btn.style.left=nx+'px';btn.style.top=ny+'px';
-  btn.style.bottom='auto';
-  btn.style.transform='scale('+noSz+')';
-  btn.style.transition='all .18s cubic-bezier(.34,1.56,.64,1)';
+  // Pop Yes out of flex flow on first click
+  if(yesBtn.style.position !== 'absolute'){
+    const yesRect=yesBtn.getBoundingClientRect();
+    yesBtn.style.position='absolute';
+    yesBtn.style.left=(yesRect.left - r.left)+'px';
+    yesBtn.style.top=(yesRect.top - r.top)+'px';
+  }
+
+  // Get touch/click position relative to box
+  const touch = e.touches ? e.touches[0] : e;
+  const tx = (touch.clientX || touch.pageX) - r.left;
+  const ty = (touch.clientY || touch.pageY) - r.top;
+
+  // No gets smaller, runs AWAY from touch
+  noSz=Math.max(.15,noSz*.72);
+  const noCx=parseFloat(noBtn.style.left)+noBtn.offsetWidth/2;
+  const noCy=parseFloat(noBtn.style.top)+noBtn.offsetHeight/2;
+  let dx=noCx-tx; let dy=noCy-ty;
+  const dist=Math.sqrt(dx*dx+dy*dy)||1;
+  dx/=dist; dy/=dist;
+  const flee=80+Math.random()*60;
+  let nx=noCx+dx*flee-noBtn.offsetWidth/2;
+  let ny=noCy+dy*flee-noBtn.offsetHeight/2;
+  nx=Math.max(4,Math.min(nx,r.width-noBtn.offsetWidth*noSz-4));
+  ny=Math.max(4,Math.min(ny,r.height-noBtn.offsetHeight*noSz-4));
+  noBtn.style.left=nx+'px';noBtn.style.top=ny+'px';
+  noBtn.style.transform='scale('+noSz+')';
+  noBtn.style.transition='all .22s cubic-bezier(.34,1.56,.64,1)';
+
+  // Yes gets bigger, moves TOWARDS touch
+  yesSz=Math.min(2.2,yesSz*1.15);
+  const yesCx=parseFloat(yesBtn.style.left)+yesBtn.offsetWidth/2;
+  const yesCy=parseFloat(yesBtn.style.top)+yesBtn.offsetHeight/2;
+  const ymx=yesCx+(tx-yesCx)*0.3-yesBtn.offsetWidth/2;
+  const ymy=yesCy+(ty-yesCy)*0.3-yesBtn.offsetHeight/2;
+  yesBtn.style.left=Math.max(4,Math.min(ymx,r.width-yesBtn.offsetWidth-4))+'px';
+  yesBtn.style.top=Math.max(4,Math.min(ymy,r.height-yesBtn.offsetHeight-4))+'px';
+  yesBtn.style.transform='scale('+yesSz+')';
+  yesBtn.style.transition='all .25s cubic-bezier(.34,1.56,.64,1)';
+
   toast(NO_JOKES[Math.floor(Math.random()*NO_JOKES.length)]);
 }
 function sayYes(){goToPage('page-celebrate');}
@@ -1414,7 +1453,7 @@ function celebrate(){
 
 /* Touch handling */
 document.addEventListener('touchstart',e=>{
-  if(e.target.id==='noBtn'){e.preventDefault();runNo();}
+  if(e.target.id==='noBtn'){e.preventDefault();runNo(e);}
 },{passive:false});
 addEventListener('resize',()=>{
   if(curPage==='page-celebrate'){
